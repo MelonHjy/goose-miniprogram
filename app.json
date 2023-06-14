@@ -5,8 +5,7 @@
     "pages/round/round",
     "pages/pointCard/pointCard",
     "pages/pointEvil/pointEvil",
-    "pages/score/score",
-    "pages/about/about"
+    "pages/score/score"
   ],
   "window": {
     "backgroundTextStyle": "light",
