@@ -1,0 +1,24 @@
+<!--pages/pointCard/pointCard.wxml-->
+<view class="page-new">
+  <view class="padding flex flex-column margin-sm radius-lg btn-new">
+    <view>请选择凶手和受害者</view>
+    <view wx:if="{{vo.nextUserId==currentUserId}}">
+      <view class="cu-avatar-group">
+        <view class="cu-avatar round lg" style="background-image:url(https://image.meiye.art/pic_1628404025424);"></view>
+        <view class="cu-avatar round lg" style="background-image:url(https://image.meiye.art/pic_1628404025424);"></view>
+        <view class="cu-avatar round lg" style="background-image:url(https://image.meiye.art/pic_1628404025424);"></view>
+        <view class="cu-avatar round lg" style="background-image:url(https://image.meiye.art/pic_1628404025424);"></view>
+        <view class="cu-avatar round lg" style="background-image:url(https://image.meiye.art/pic_1628404025424);"></view>
+        <view class="cu-avatar round lg" style="background-image:url(https://image.meiye.art/pic_1628404025424);"></view>
+        <view class="cu-avatar round lg" style="background-image:url(https://image.meiye.art/pic_1628404025424);"></view>
+        <view class="cu-avatar round lg" style="background-image:url(https://image.meiye.art/pic_1628404025424);"></view>
+      </view>
+      <button class="cu-btn bg-grey lg" bindtap="confirm">确认</button>
+    </view>
+
+    <view wx:else>
+      <view>等待选择</view>
+    </view>
+
+  </view>
+</view>

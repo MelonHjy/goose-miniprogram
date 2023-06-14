@@ -1,11 +1,21 @@
-// pages/about/appreciate/appreciate.js
+// pages/pointCard/pointCard.js
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
+    currentUserId:'123',
+    vo:{
+      nextUserId:'123',
+      status:'pointEvil'
+    }
+  },
 
+  confirm() {
+    if(this.data.vo.status=='pointEvil'){
+      wx.redirectTo({ url: '/pages/pointEvil/pointEvil?id=1'})
+    }
   },
 
   /**
@@ -62,17 +72,5 @@ Page({
    */
   onShareAppMessage() {
 
-  },
-
-  CopyText(e) {
-    wx.setClipboardData({
-      data: e.currentTarget.dataset.link,
-      success: res => {
-        wx.showToast({
-          title: '已复制',
-          duration: 1000,
-        })
-      }
-    })
-  },
+  }
 })

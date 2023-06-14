@@ -1,0 +1,23 @@
+<!--pages/round/round.wxml-->
+<view class="page-new">
+  <view class="padding flex flex-column margin-sm radius-lg btn-new">
+    <view>第{{roundInfo.round}}轮</view>
+    <view>你的身份是{{roleText}}，第{{roundInfo.sort}}个表演</view>
+    <view wx:if="{{roundInfo.role=='head'}}">
+      <view class="cu-avatar-group">
+        <view class="cu-avatar round lg" style="background-image:url(https://image.meiye.art/pic_1628404025424);"></view>
+        <view class="cu-avatar round lg" style="background-image:url(https://image.meiye.art/pic_1628404025424);"></view>
+      </view>
+    </view>
+    <view wx:elif="{{roundInfo.last}}">
+      <navigator open-type="navigate" hover-class='none' url="/pages/pointCard/pointCard">
+        <button class="cu-btn bg-grey lg">还原案情</button>
+      </navigator>
+    </view>
+
+    <view wx:else>
+      <view>等待表演</view>
+    </view>
+
+  </view>
+</view>
