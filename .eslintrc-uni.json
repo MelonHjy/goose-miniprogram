@@ -1,0 +1,8 @@
+{
+  "globals": {
+    "UniApp": true,
+    "uni": true,
+    "wx": true,
+    "getCurrentPages": true
+  }
+}

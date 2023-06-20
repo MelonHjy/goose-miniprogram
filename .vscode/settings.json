@@ -1,0 +1,26 @@
+{
+  // 一个制表符等于的空格数。
+  "editor.tabSize": 2,
+  // 按 Tab 键时插入空格。
+  "editor.insertSpaces": true,
+  // 在保存时运行的代码操作类型。
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+    "source.fixAll.stylelint": true
+  },
+  "editor.formatOnSave": false, // 保存时自动格式化
+  "typescript.updateImportsOnFileMove.enabled": "never",
+  "css.lint.unknownAtRules": "ignore",
+  "stylelint.validate": [
+    "css",
+    "less",
+    "postcss",
+    "scss",
+    "vue",
+    "sass"
+  ],
+  "files.associations": {
+    "pages.json": "jsonc",
+    "manifest.json": "jsonc"
+  }
+}

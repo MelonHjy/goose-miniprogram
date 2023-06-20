@@ -1,0 +1,28 @@
+{
+  // 全局组件
+  "easycom": {
+    "autoscan": true,
+    "custom": {
+      "cu-custom": "@/components/cu-custom",
+      "^app-(.*)": "@components/app-$1/app-$1.vue",
+      // https://jin-yufeng.gitee.io/mp-html
+      "mp-html": "mp-html//dist/uni-app/components/mp-html/mp-html.vue",
+      // https://uniapp.dcloud.net.cn/component/uniui/uni-ui.html
+      "^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue",
+      // https://vkuviewdoc.fsq.pub/
+      "^u-(.*)": "vk-uview-ui/components/u-$1/u-$1.vue"
+    }
+  },
+  // 全局样式
+  "globalStyle": {
+    "navigationBarTitleText": "以喵传喵",
+    "backgroundColor": "#f7f7f7",
+    "navigationBarTextStyle": "black",
+    "navigationBarBackgroundColor": "#ffffff"
+  },
+  // 页面
+  "pages": [
+    { "path": "pages/index", "style": { "navigationBarTitleText": "以喵传喵", "navigationStyle": "custom", "navigationBarBackgroundColor": "#C98800" } },
+    { "path": "pages/login/index", "style": { "navigationBarTitleText": "登录" } }
+  ]
+}
