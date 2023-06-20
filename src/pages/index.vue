@@ -59,7 +59,7 @@ const navList = ref([
     title: '游戏规则',
     name: 'bar',
     color: 'olive light',
-    icon: 'baby'
+    icon: 'info'
   }
 ])
 </script>
