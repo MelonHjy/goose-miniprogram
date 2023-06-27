@@ -23,6 +23,10 @@
   // 页面
   "pages": [
     { "path": "pages/index", "style": { "navigationBarTitleText": "以喵传喵", "navigationStyle": "custom", "navigationBarBackgroundColor": "#C98800" } },
-    { "path": "pages/login/index", "style": { "navigationBarTitleText": "登录" } }
+    { "path": "pages/login/index", "style": { "navigationBarTitleText": "登录" } },
+    { "path": "pages/rule/index", "style": { "navigationBarTitleText": "游戏规则" } },
+    { "path": "pages/room/room", "style": { "navigationBarTitleText": "房间" } },
+    { "path": "pages/record/index", "style": { "navigationBarTitleText": "对局记录" } },
+    { "path": "pages/score/index", "style": { "navigationBarTitleText": "计分板" } }
   ]
 }

@@ -57,6 +57,10 @@ export default defineConfig({
             'onNavigationBarSearchInputClicked',
             'onAddToFavorites'
           ],
+          '@/plugins/app-core': [
+            'useConfig',
+            'useService'
+          ],
           '@/utils/userInfo': [
             'getToken',
             'setToken',

@@ -9,7 +9,7 @@ const config = {
   UPLOAD_FILE_URL: '',
 
   // 资源路径 （云端图片、云端文件）
-  ASSETS_BASE_URL: '',
+  ASSETS_BASE_URL: '127.0.0.1',
 
   // WebSocket base url
   WS_BASE_URL: '',

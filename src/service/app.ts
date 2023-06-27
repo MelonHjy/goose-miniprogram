@@ -189,3 +189,8 @@ export const getUserIntegral = (params?: any) => {
 export const getPlatformIntegral = () => {
   return request.get('/client/integral/index', {}) as Promise<any>
 }
+
+// 获取游戏规则
+export const getRules = async () => {
+  return request.get('/common/rules') as Promise<any>
+}
