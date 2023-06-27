@@ -1,27 +1,27 @@
 <template>
   <app-background>
     <template #background>
-      <image class="background-image" src="@/assets/index/images/background.webp" mode="aspectFill" />
+      <image class="background-image" src="@/assets/index/images/background.png" mode="aspectFill" />
     </template>
     <view class="page">
       <cu-custom :is-back="false" />
-      <image class="page-title animation-fade" src="@/assets/index/images/title.webp" mode="widthFix" />
+      <image class="page-title animation-fade" src="@/assets/index/images/title.png" mode="widthFix" />
 
       <!-- 组件list -->
       <view class="nav-list margin-top">
-        <view v-for="item in navList" :key="item.name" hover-class="none" class="nav-li" :class="`bg-${item.color}`">
+        <view v-for="item in navList" :key="item.name" hover-class="none" class="nav-li" :class="`bg-${item.color}`" @click="navigate(item)">
           <image src="@/assets/index/images/0004.svg" mode="widthFix" class="image-bg" />
           <view class="nav-title">
             <text>{{ item.title }}</text>
           </view>
-          <view class="flex">
+          <!-- <view class="flex">
             <view class="flex-sub nav-name">
               <text>{{ item.name }}</text>
             </view>
             <view class="flex-sub nav-des text-right align-end">
               <text>组件</text>
             </view>
-          </view>
+          </view> -->
           <text :class="`cuIcon-${item.icon}`" />
         </view>
       </view>
@@ -31,37 +31,63 @@
 
 <script setup lang="ts">
 const navList = ref([
-  {
-    title: '线上对局',
-    name: 'bar',
-    color: 'pink light w-full',
-    icon: 'game'
-  },
+  // {
+  //   title: '线上对局',
+  //   name: 'bar',
+  //   color: 'pink light w-full',
+  //   icon: 'game',
+  //   link: '/room/index'
+  // },
   {
     title: '线下对局',
     name: 'bar',
     color: 'red light',
-    icon: 'friendadd'
+    icon: 'friendadd',
+    linkType: 'page',
+    link: 'room/room'
   },
   {
     title: '加入对局',
     name: 'bar',
     color: 'orange light',
-    icon: 'friend'
+    icon: 'friend',
+    linkType: 'input',
+    link: 'room/room'
   },
   {
     title: '对局记录',
     name: 'bar',
     color: 'yellow light',
-    icon: 'baby'
+    icon: 'baby',
+    linkType: 'page',
+    link: 'record/index'
   },
   {
     title: '游戏规则',
     name: 'bar',
     color: 'olive light',
-    icon: 'info'
+    icon: 'info',
+    linkType: 'page',
+    link: 'rule/index'
   }
 ])
+
+// 点击事件
+const navigate = (item:any) => {
+  if (item.linkType === 'page') {
+    uni.navigateTo({
+      url: item.link,
+      fail (err) {
+        console.log(err)
+      }
+    })
+  }
+  // if (item.linkType === 'input') {
+  //   // 弹出输入框
+  //   // router.push(item.link)
+  // }
+}
+
 </script>
 
 <style lang="scss" scoped>
@@ -99,6 +125,7 @@ const navList = ref([
     background-position: center;
     background-size: cover;
     border-radius: 20px;
+    height: 165rpx;
   }
 
   .nav-li::after {
