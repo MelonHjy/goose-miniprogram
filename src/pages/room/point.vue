@@ -52,7 +52,7 @@ const handleGrid = (item:any) => {
 const confirm = (item:any) => {
   console.log('hahahaha')
   uni.navigateTo({
-    url: '/pages/score/index',
+    url: '/pages/score/score',
     fail (err) {
       console.log(err)
     }

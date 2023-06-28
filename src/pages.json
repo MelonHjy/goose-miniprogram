@@ -29,7 +29,7 @@
     { "path": "pages/room/show", "style": { "navigationBarTitleText": "表演环节" } },
     { "path": "pages/room/restore", "style": { "navigationBarTitleText": "还原案情" } },
     { "path": "pages/room/point", "style": { "navigationBarTitleText": "指认恶猫" } },
-    { "path": "pages/record/index", "style": { "navigationBarTitleText": "对局记录" } },
+    { "path": "pages/record/record", "style": { "navigationBarTitleText": "对局记录" } },
     { "path": "pages/score/score", "style": { "navigationBarTitleText": "计分板" } }
   ]
 }

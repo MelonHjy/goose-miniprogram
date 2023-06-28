@@ -60,7 +60,7 @@ const navList = ref([
     color: 'yellow light',
     icon: 'baby',
     linkType: 'page',
-    link: 'record/index'
+    link: 'record/record'
   },
   {
     title: '游戏规则',
