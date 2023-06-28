@@ -25,7 +25,7 @@ const recordList = [
 // 点击事件
 const navigate = () => {
   uni.navigateTo({
-    url: '/pages/score/index',
+    url: '/pages/score/score',
     fail (err) {
       console.log(err)
     }

@@ -27,6 +27,6 @@
     { "path": "pages/rule/index", "style": { "navigationBarTitleText": "游戏规则" } },
     { "path": "pages/room/room", "style": { "navigationBarTitleText": "房间" } },
     { "path": "pages/record/index", "style": { "navigationBarTitleText": "对局记录" } },
-    { "path": "pages/score/index", "style": { "navigationBarTitleText": "计分板" } }
+    { "path": "pages/score/score", "style": { "navigationBarTitleText": "计分板" } }
   ]
 }
