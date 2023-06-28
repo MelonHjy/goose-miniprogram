@@ -26,11 +26,8 @@
       </view>
 
       <view class="wrap">
-        <button class="button" type="primary" @click="begin()">
-          开始游戏
-        </button>
-        <button class="button" type="primary" @click="invite()">
-          邀请好友
+        <button class="button" type="primary" @click="confirm()">
+          确认
         </button>
       </view>
     </view>
@@ -52,18 +49,14 @@ const handleGrid = (item:any) => {
   console.log('hahahaha')
 }
 // 开始游戏
-const begin = (item:any) => {
+const confirm = (item:any) => {
   console.log('hahahaha')
   uni.navigateTo({
-    url: '/pages/room/show',
+    url: '/pages/score/index',
     fail (err) {
       console.log(err)
     }
   })
-}
-// 邀请好友
-const invite = (item:any) => {
-  console.log('hahahaha')
 }
 </script>
 
