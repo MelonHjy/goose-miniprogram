@@ -9,7 +9,14 @@
 
       <!-- 组件list -->
       <view class="nav-list margin-top">
-        <view v-for="item in navList" :key="item.name" hover-class="none" class="nav-li" :class="`bg-${item.color}`" @click="navigate(item)">
+        <view
+          v-for="item in navList"
+          :key="item.name"
+          hover-class="none"
+          class="nav-li"
+          :class="`bg-${item.color}`"
+          @click="navigate(item)"
+        >
           <image src="@/assets/index/images/0004.svg" mode="widthFix" class="image-bg" />
           <view class="nav-title">
             <text>{{ item.title }}</text>
@@ -25,11 +32,26 @@
           <text :class="`cuIcon-${item.icon}`" />
         </view>
       </view>
+
+      <!-- 输入房间号弹框 -->
+      <view>
+        <uni-popup ref="inputRoomDialog" type="dialog">
+          <uni-popup-dialog
+            ref="inputClose"
+            mode="input"
+            title="进入房间"
+            :value="roomNumber"
+            placeholder="请输入房间号"
+            @confirm="dialogInputRoomConfirm()"
+          />
+        </uni-popup>
+      </view>
     </view>
   </app-background>
 </template>
 
 <script setup lang="ts">
+
 const navList = ref([
   // {
   //   title: '线上对局',
@@ -72,8 +94,11 @@ const navList = ref([
   }
 ])
 
+const inputRoomDialog = ref(null)
+const roomNumber = ref()
+
 // 点击事件
-const navigate = (item:any) => {
+const navigate = (item: any) => {
   if (item.linkType === 'page') {
     uni.navigateTo({
       url: item.link,
@@ -82,10 +107,26 @@ const navigate = (item:any) => {
       }
     })
   }
-  // if (item.linkType === 'input') {
-  //   // 弹出输入框
-  //   // router.push(item.link)
-  // }
+  if (item.linkType === 'input') {
+    // 检查登录
+    console.log('check login status')
+
+    // 弹出输入框
+    inputRoomDialog.value.open()
+  }
+}
+
+// 加入房间弹出框
+const dialogInputRoomConfirm = () => {
+  uni.navigateTo({
+    url: 'room/room',
+    success () {
+      roomNumber.value = null
+    },
+    fail (err) {
+      console.log(err)
+    }
+  })
 }
 
 </script>
@@ -202,7 +243,7 @@ const navigate = (item:any) => {
     font-size: 36px;
   }
 
-  .nav-li > text {
+  .nav-li>text {
     position: absolute;
     top: 16px;
     right: 24px;
