@@ -1,7 +1,11 @@
 <template>
   <app-background>
     <template #background>
-      <image class="background-image" src="@/assets/index/images/background.png" mode="aspectFill" />
+      <image
+        class="background-image"
+        src="@/assets/index/images/background.png"
+        mode="aspectFill"
+      />
     </template>
     <view class="page">
       <view class="title">
@@ -10,20 +14,20 @@
       <!-- 宫格 -->
       <view class="mb-[10px] mt-[24px]">
         <uni-grid :column="4" :show-border="false" :square="false">
-          <uni-grid-item v-for="(item, index) in grids" :key="index" :custom-style="{ 'background': 'none' }">
-            <view class="grid-item-img" @click="handleGrid(item.userId)">
-              <image :src="item.logo" class="grid-icon" :class="{ 'confirm_img': item.confirm }" />
-              <p v-if="item.owner" class="owner-icon">
-                &ensp;你&ensp;
-              </p>
+          <uni-grid-item
+            v-for="(item, index) in gridImages"
+            :key="index"
+            :custom-style="{ background: 'none' }"
+          >
+            <view class="grid-item-img" @click="handleGridImages(item.userId)">
+              <image :src="item.logo" class="grid-icon" :class="{ confirm_img: item.confirm }" />
+              <text v-if="item.owner" class="owner-icon"> &ensp;你&ensp; </text>
               <view
                 v-if="selectedUserId == item.userId"
                 class="cuIcon-roundcheck text-green text-shadow check-icon"
-                style="font-size: 55rpx;"
+                style="font-size: 55rpx"
               />
-              <p v-if="item.confirm" class="confirm-text">
-                已确认
-              </p>
+              <text v-if="item.confirm" class="confirm-text"> 已确认 </text>
 
               <text>{{ item.nickname }}</text>
             </view>
@@ -32,9 +36,7 @@
       </view>
 
       <view class="wrap">
-        <button class="button" type="primary" @click="confirm()">
-          确认
-        </button>
+        <button class="button" type="primary" @click="confirmNextStep()">确认</button>
       </view>
     </view>
   </app-background>
@@ -42,42 +44,77 @@
 
 <script setup lang="ts">
 // 初始宫格内容
-const grids = ref([
-  { logo: 'https://jfkhjoidjf.ltd/api/static/file/cat/afro.png', nickname: '张三', owner: true, seat: 1, userId: '1', confirm: false },
-  { logo: 'https://jfkhjoidjf.ltd/api/static/file/cat/afro.png', nickname: '李四', owner: false, seat: 2, userId: '2', confirm: false },
-  { logo: 'https://jfkhjoidjf.ltd/api/static/file/cat/afro.png', nickname: '王五', owner: false, seat: 3, userId: '3', confirm: true },
-  { logo: 'https://jfkhjoidjf.ltd/api/static/file/cat/afro.png', nickname: '老六', owner: false, seat: 4, userId: '4', confirm: false },
-  { logo: 'https://jfkhjoidjf.ltd/api/static/file/cat/afro.png', nickname: '小七', owner: false, seat: 5, userId: '5', confirm: true }
-])
+const gridImages = ref([
+  {
+    logo: "https://jfkhjoidjf.ltd/api/static/file/cat/afro.png",
+    nickname: "张三",
+    owner: true,
+    seat: 1,
+    userId: "1",
+    confirm: false,
+  },
+  {
+    logo: "https://jfkhjoidjf.ltd/api/static/file/cat/afro.png",
+    nickname: "李四",
+    owner: false,
+    seat: 2,
+    userId: "2",
+    confirm: false,
+  },
+  {
+    logo: "https://jfkhjoidjf.ltd/api/static/file/cat/afro.png",
+    nickname: "王五",
+    owner: false,
+    seat: 3,
+    userId: "3",
+    confirm: true,
+  },
+  {
+    logo: "https://jfkhjoidjf.ltd/api/static/file/cat/afro.png",
+    nickname: "老六",
+    owner: false,
+    seat: 4,
+    userId: "4",
+    confirm: false,
+  },
+  {
+    logo: "https://jfkhjoidjf.ltd/api/static/file/cat/afro.png",
+    nickname: "小七",
+    owner: false,
+    seat: 5,
+    userId: "5",
+    confirm: true,
+  },
+]);
 
 // 被选择的角色
-const selectedUserId = ref()
+const selectedUserId = ref();
 
 // 九宫格item点击事件
-const handleGrid = (userId: string) => {
+const handleGridImages = (userId: string) => {
   // console.log('selected', userId)
 
-  if (!grids.value[0].confirm) {
-    selectedUserId.value = userId
+  if (!gridImages.value[0].confirm) {
+    selectedUserId.value = userId;
   }
-}
+};
 
 // 确认
-const confirm = () => {
-  if (grids.value[0].confirm) {
+const confirmNextStep = () => {
+  if (gridImages.value[0].confirm) {
     uni.navigateTo({
-      url: '/pages/score/score',
-      success () {
-        grids.value[0].confirm = false
+      url: "/pages/score/score",
+      success() {
+        gridImages.value[0].confirm = false;
       },
-      fail (err) {
-        console.log(err)
-      }
-    })
+      fail(err) {
+        console.log(err);
+      },
+    });
   } else {
-    grids.value[0].confirm = true
+    gridImages.value[0].confirm = true;
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
