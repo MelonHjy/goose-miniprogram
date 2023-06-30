@@ -4,9 +4,9 @@
       <view class="login-page-logo">
         <!-- <image class="login-page-logo__image" src="@/assets/logo.png" /> -->
       </view>
-      <view class="login-page-tip">
+      <!-- <view class="login-page-tip">
         <text>欢迎使用{{ config.TITLE }}</text>
-      </view>
+      </view> -->
     </view>
     <view class="login-page__content" />
     <view class="login-page__button">
@@ -29,6 +29,7 @@
 </template>
 
 <script lang="ts" setup>
+const service = useService()
 
 // 进入页面时，注销登录
 onLoad(async () => {
@@ -65,7 +66,7 @@ onLoad((options) => {
 })
 
 // 同意用户协议与隐私条款
-const agreementFlag = ref(false)
+// const agreementFlag = ref(false)
 const validateaAreementFlag = async function (event: any) {
   console.log(event)
   if (event?.detail?.errMsg?.includes('fail')) return
@@ -96,16 +97,15 @@ const validateaAreementFlag = async function (event: any) {
 const submitForm = async function (event: any) {
   if (!flagId.value) return
   const { encryptedData, iv } = event.detail
-
-  if (!agreementFlag.value) return
-
+  // if (!agreementFlag.value) return
   if (encryptedData == null || iv == null) return uni.showToast({ icon: 'none', title: '需要允许获取用户手机号授权' })
-  // const userInfo = await service.app.loginByWeixin({
-  //   flagId: flagId.value,
-  //   encryptedData,
-  //   iv,
-  //   inviterId: props.value.inviterId || ''
-  // })
+  console.log(service)
+  const userInfo = await service.app.loginByWeixin({
+    flagId: flagId.value,
+    encryptedData,
+    iv,
+    inviterId: props.value.inviterId || ''
+  })
 
   console.log({
     flagId: flagId.value,
@@ -117,10 +117,10 @@ const submitForm = async function (event: any) {
   uni.showToast({ icon: 'none', title: '登录成功' })
 
   // // 设置Token
-  // await setToken(userInfo.token)
+  await setToken(userInfo.token)
 
   // // 设置用户信息
-  // await setUserInfo(userInfo)
+  await setUserInfo(userInfo)
 }
 
 </script>

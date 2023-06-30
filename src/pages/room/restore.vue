@@ -16,7 +16,7 @@
             v-for="(item,index) in data.cardVos"
             :key="index"
             :custom-style="{'background':'none'}"
-            @click="handleGrid(item)"
+            @click="handleGrid(index)"
           >
             <view class="grid-item-img">
               <image :src="item.url" class="grid-icon" />
@@ -65,8 +65,7 @@ const data = {
   ]
 }
 
-// 开始表演
-const handleGrid = () => {
+const handleGrid = (index) => {
   console.log('hahahaha')
   // beginShow = false
 }

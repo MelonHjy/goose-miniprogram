@@ -4,12 +4,12 @@ import debounceAsync from '@/utils/debounceAsync'
 
 // 获取微信登录 FlagId
 export const getWeixinFlagId = async (params: { code: string }) => {
-  return request.get('/client/login/wechat/authCode', { params }) as Promise<any>
+  return request.get('/user/wechat/authCode', { params }) as Promise<any>
 }
 
 // 微信登录
 export const loginByWeixin = async (params: { encryptedData: string, iv: string, flagId: string, inviterId?: string }) => {
-  return request.post('/client/login/wechat/login', params) as Promise<any>
+  return request.post('/user/login', params) as Promise<any>
 }
 // 获取微信登录的授权码 pc-wx
 export const getPcWeixinFlagId = async (params: { code: string, flagId: string}) => {

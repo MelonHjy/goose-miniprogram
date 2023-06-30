@@ -8,26 +8,44 @@ export interface UserInfo {
   [key: string]: any
 }
 
-export function getToken (): Promise<string | null> {
-  return new Promise((resolve) => {
-    return resolve(window.localStorage.getItem('token'))
+export async function getToken (): Promise<string | null> {
+  return new Promise((resolve, reject) => {
+    return uni.getStorage({
+      key: 'token',
+      success: (result) => resolve(result?.data),
+      fail: () => resolve(null)
+    })
   })
 }
 
-export function setToken (token: string | null): Promise<void> {
-  return new Promise((resolve) => {
-    return resolve(window.localStorage.setItem('token', token ?? ''))
+export async function setToken (token: string | null): Promise<void> {
+  return new Promise((resolve, reject) => {
+    return uni.setStorage({
+      key: 'token',
+      data: token,
+      success: (result) => resolve(result?.data),
+      fail: (error) => reject(new Error(error.errMsg || error.message))
+    })
   })
 }
 
-export function getUserInfo (): Promise<UserInfo | null> {
-  return new Promise((resolve) => {
-    return resolve(JSON.parse(window.localStorage.getItem('userInfo') ?? 'null'))
+export async function getUserInfo (): Promise<UserInfo | null> {
+  return new Promise((resolve, reject) => {
+    return uni.getStorage({
+      key: 'userInfo',
+      success: (result) => resolve(result?.data),
+      fail: () => resolve(null)
+    })
   })
 }
 
-export function setUserInfo (userInfo: UserInfo | null): Promise<void> {
-  return new Promise((resolve) => {
-    return resolve(window.localStorage.setItem('userInfo', JSON.stringify(userInfo)))
+export async function setUserInfo (userInfo: UserInfo | null): Promise<void> {
+  return new Promise((resolve, reject) => {
+    return uni.setStorage({
+      key: 'userInfo',
+      data: userInfo,
+      success: (result) => resolve(result?.data),
+      fail: (error) => reject(new Error(error.errMsg))
+    })
   })
 }
