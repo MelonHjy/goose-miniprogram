@@ -18,11 +18,6 @@
 </template>
 
 <script setup lang="ts">
-// import { useService, useConfig } from '@/plugins/app-core'
-// import { useConfig } from '@/plugins/app-core'
-import { useService } from '@/plugins/app-core'
-// const config = useConfig()
-// console.log(config)
 const service = useService()
 console.log(service)
 // const content = service.app.getProtocol({ type: 3 })
@@ -41,14 +36,16 @@ const content = '<p>&nbsp; &nbsp; &nbsp; &nbsp; 类似于王牌对王牌（奖�
   width: 100%;
   height: 100%;
 }
+
 .w-full {
   width: 100% !important;
 }
+
 .content-wrapper {
-  margin-top: 20px;
   margin: 30rpx;
-  font-size: 30rpx;
+  margin-top: 20px;
   color: #f1f1f1;
+  font-size: 30rpx;
 
   // &:last-child {
   //   margin-bottom: 0;

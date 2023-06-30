@@ -57,17 +57,13 @@ export default defineConfig({
             'onNavigationBarSearchInputClicked',
             'onAddToFavorites'
           ],
-          '@/plugins/app-core': [
-            'useConfig',
-            'useService'
-          ],
           '@/utils/userInfo': [
             'getToken',
             'setToken',
             'getUserInfo',
             'setUserInfo'
           ],
-          '@/utils/composables': ['assets', 'dayjs', 'datetimeFormat', 'dateFormat', 'timeFormat']
+          '@/utils/composables': ['assets', 'dayjs', 'datetimeFormat', 'dateFormat', 'timeFormat', 'useConfig', 'useService']
         }
       ],
       eslintrc: {
