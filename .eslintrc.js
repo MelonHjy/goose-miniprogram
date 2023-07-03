@@ -31,8 +31,11 @@ module.exports = {
       }
     }],
     'vue/no-dupe-keys': 'off',
-    'vue/singleline-html-element-content-newline': ['error', {
-      ignores: ['pre', 'textarea', 'text']
-    }]
+    semi: "off",
+    quotes: "off",
+    'comma-dangle': 'off',
+    'space-before-function-paren': 'off',
+    'no-useless-return': 'off',
+    'vue/singleline-html-element-content-newline': 'off'
   }
 }
