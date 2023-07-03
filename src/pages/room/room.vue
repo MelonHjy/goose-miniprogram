@@ -38,16 +38,6 @@
 </template>
 
 <script setup lang="ts">
-// const userInfo = getUserinfo()
-// 判断没登录，跳转到登录页面
-// if (!userInfo) {
-uni.navigateTo({
-  url: '/pages/login/index',
-  fail (err) {
-    console.log(err)
-  }
-})
-// }
 // 初始宫格内容
 const grids = [
   { logo: 'https://jfkhjoidjf.ltd/api/static/file/cat/afro.png', nickname: '张三', owner: true, seat: 1, userId: '1' },

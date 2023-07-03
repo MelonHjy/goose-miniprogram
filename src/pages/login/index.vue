@@ -10,21 +10,11 @@
     </view>
     <view class="login-page__content" />
     <view class="login-page__button">
-      <button class="ym-button ym-button--primary login-button" open-type="getPhoneNumber" @getphonenumber="validateaAreementFlag">
+      <button class="ym-button ym-button--primary login-button" open-type="getPhoneNumber" @getphonenumber="submitForm">
         <!-- <image class="icon-weixin" src="@/assets/images/login/icon-weixin.png" /> -->
         <text>微信用户一键登录</text>
       </button>
     </view>
-    <!-- <view class="agreement-box">
-      <view class="agree-box" @click="agreementFlag = !agreementFlag">
-        <uni-icons v-if="agreementFlag" type="checkbox-filled" color="#C98800" size="24" />
-        <uni-icons v-else type="circle" color="#C98800" size="24" />
-        <text>登录即同意百会链</text>
-        <text class="link">《用户协议》</text>
-        <text class="text-color-primary">与</text>
-        <text class="link">《隐私协议》</text>
-      </view>
-    </view> -->
   </view>
 </template>
 
@@ -42,8 +32,8 @@ const flagId = ref('')
 const getFlagId = async () => {
   const loginResult = await (uni.login({ provider: 'weixin' }) as unknown as Promise<{ code: string }>)
   const code = loginResult.code
-  // flagId.value = await service.app.getWeixinFlagId({ code })
-  flagId.value = code
+  flagId.value = await service.app.getWeixinFlagId({ code })
+  // flagId.value = code
 }
 onMounted(getFlagId)
 const getFlagIdTimer = setInterval(getFlagId, 1000 * 60 * 10)
@@ -65,41 +55,12 @@ onLoad((options) => {
   props.value.from = decodeURIComponent(options?.from || loginStorageFrom || '')
 })
 
-// 同意用户协议与隐私条款
-// const agreementFlag = ref(false)
-const validateaAreementFlag = async function (event: any) {
-  console.log(event)
-  if (event?.detail?.errMsg?.includes('fail')) return
-
-  submitForm(event)
-  // if (agreementFlag.value) {
-  //   submitForm(event)
-  // } else {
-  //   uni.showModal({
-  //     title: '用户协议与隐私政策',
-  //     content: '同意以下协议：百会链《用户协议》与《隐私政策》，未注册的手机号将自动完成账号注册。',
-  //     confirmText: '同意',
-  //     cancelText: '不同意',
-  //     showCancel: true,
-  //     success: async (res) => {
-  //       if (res.confirm) {
-  //         agreementFlag.value = true
-  //         submitForm(event)
-  //       } else {
-  //         return uni.showToast({ title: '请同意用户协议与隐私条款', icon: 'none' })
-  //       }
-  //     }
-  //   })
-  // }
-}
-
 // 微信登录
 const submitForm = async function (event: any) {
   if (!flagId.value) return
   const { encryptedData, iv } = event.detail
   // if (!agreementFlag.value) return
   if (encryptedData == null || iv == null) return uni.showToast({ icon: 'none', title: '需要允许获取用户手机号授权' })
-  console.log(service)
   const userInfo = await service.app.loginByWeixin({
     flagId: flagId.value,
     encryptedData,
@@ -121,6 +82,8 @@ const submitForm = async function (event: any) {
 
   // // 设置用户信息
   await setUserInfo(userInfo)
+
+  return uni.reLaunch({ url: '/pages/index' })
 }
 
 </script>

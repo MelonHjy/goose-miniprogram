@@ -94,25 +94,24 @@ const navList = ref([
   }
 ])
 
-const inputRoomDialog = ref(null)
+const inputRoomDialog = ref()
 const roomNumber = ref()
 
 // 点击事件
-const navigate = (item: any) => {
-  if (item.linkType === 'page') {
-    uni.navigateTo({
-      url: item.link,
-      fail (err) {
-        console.log(err)
-      }
-    })
-  }
-  if (item.linkType === 'input') {
-    // 检查登录
-    console.log('check login status')
-
+const navigate = async function (item: any) {
+  if (await checkLogin()) {
+    if (item.linkType === 'page') {
+      uni.navigateTo({
+        url: item.link,
+        fail (err) {
+          console.log(err)
+        }
+      })
+    }
+    if (item.linkType === 'input') {
     // 弹出输入框
-    inputRoomDialog.value.open()
+      inputRoomDialog.value.open()
+    }
   }
 }
 
@@ -129,6 +128,20 @@ const dialogInputRoomConfirm = () => {
   })
 }
 
+const checkLogin = async function () {
+  const userInfo = await getUserInfo()
+  // 判断没登录，跳转到登录页面
+  if (!userInfo) {
+    uni.navigateTo({
+      url: '/pages/login/index',
+      fail (err) {
+        console.log(err)
+      }
+    })
+    return false
+  }
+  return true
+}
 </script>
 
 <style lang="scss" scoped>
