@@ -211,7 +211,7 @@ type TButton = TComponent<{
   /** 用于 form 组件，点击分别会触发 form 组件的 submit/reset 事件 */
   formType: 'submit' | 'reset';
   /** 跳转方式 */
-  openType: 'navigate' | 'redirect' | 'switchTab' | 'reLaunch' | 'navigateBack';
+  openType: 'navigate' | 'redirect' | 'switchTab' | 'reLaunch' | 'navigateBack' | 'getPhoneNumber';
   /**  */
   lang: 'ts';
   /** 会话来源 */

@@ -11,16 +11,14 @@
   "editor.formatOnSave": false, // 保存时自动格式化
   "typescript.updateImportsOnFileMove.enabled": "never",
   "css.lint.unknownAtRules": "ignore",
-  "stylelint.validate": [
-    "css",
-    "less",
-    "postcss",
-    "scss",
-    "vue",
-    "sass"
-  ],
+  "stylelint.validate": ["css", "less", "postcss", "scss", "vue", "sass"],
   "files.associations": {
     "pages.json": "jsonc",
     "manifest.json": "jsonc"
-  }
+  },
+  "[vue]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    // "editor.defaultFormatter": "Vue.volar"
+  },
+  "prettier.printWidth": 120
 }

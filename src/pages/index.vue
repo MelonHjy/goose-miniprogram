@@ -40,7 +40,7 @@
             ref="inputClose"
             mode="input"
             title="进入房间"
-            :value="roomNumber"
+            :value="roomId"
             placeholder="请输入房间号"
             @confirm="dialogInputRoomConfirm()"
           />
@@ -51,6 +51,7 @@
 </template>
 
 <script setup lang="ts">
+const homeService = useService()
 
 const navList = ref([
   // {
@@ -65,7 +66,7 @@ const navList = ref([
     name: 'bar',
     color: 'red light',
     icon: 'friendadd',
-    linkType: 'page',
+    linkType: 'offlineRoom',
     link: 'room/room'
   },
   {
@@ -73,7 +74,7 @@ const navList = ref([
     name: 'bar',
     color: 'orange light',
     icon: 'friend',
-    linkType: 'input',
+    linkType: 'inputRoom',
     link: 'room/room'
   },
   {
@@ -95,7 +96,7 @@ const navList = ref([
 ])
 
 const inputRoomDialog = ref()
-const roomNumber = ref()
+const roomId = ref()
 
 // 点击事件
 const navigate = async function (item: any) {
@@ -107,10 +108,21 @@ const navigate = async function (item: any) {
           console.log(err)
         }
       })
-    }
-    if (item.linkType === 'input') {
-    // 弹出输入框
+    } else if (item.linkType === 'inputRoom') {
+    // 弹出输入框 进入房间
       inputRoomDialog.value.open()
+    } else if (item.linkType === 'offlineRoom') {
+      // 创建房间
+      const r = await homeService.app.createOfflineRoom({ type: "offline" })
+
+      roomId.value = r.roomId
+
+      uni.navigateTo({
+        url: item.link + '?roomId=' + roomId.value,
+        fail (err) {
+          console.log(err)
+        }
+      })
     }
   }
 }
@@ -118,9 +130,10 @@ const navigate = async function (item: any) {
 // 加入房间弹出框
 const dialogInputRoomConfirm = () => {
   uni.navigateTo({
-    url: 'room/room',
+    url: 'room/room?roomId=' + roomId.value,
     success () {
-      roomNumber.value = null
+      console.log(roomId)
+      // roomId.value = null
     },
     fail (err) {
       console.log(err)

@@ -5,15 +5,15 @@
     </template>
     <view class="page">
       <view class="title">
-        <text>房间号：123456</text>
+        <text>房间号：{{ roomId }}</text>
       </view>
       <!-- 宫格 -->
       <view class="mb-[10px] mt-[24px]">
         <uni-grid :column="4" :show-border="false" :square="false">
           <uni-grid-item
-            v-for="(item,index) in grids"
+            v-for="(item, index) in grids"
             :key="index"
-            :custom-style="{'background':'none'}"
+            :custom-style="{ background: 'none' }"
             @click="handleGrid(item)"
           >
             <view class="grid-item-img">
@@ -26,45 +26,74 @@
       </view>
 
       <view class="wrap">
-        <button class="button" type="primary" @click="begin()">
-          开始游戏
-        </button>
-        <button class="button" type="primary" @click="invite()">
-          邀请好友
-        </button>
+        <button class="button" type="primary" @click="begin()">开始游戏</button>
+        <button class="button" type="primary" @click="invite()">邀请好友</button>
       </view>
     </view>
   </app-background>
 </template>
 
 <script setup lang="ts">
+import config from "@/config"
+
+const roomId = ref('')
+
+onLoad(async (option) => {
+  // 加入线下房间
+  const userInfo = await getUserInfo();
+  const userId = userInfo.userId
+  roomId.value = option.roomId
+
+  const wsurl = config.WS_BASE_URL + roomId.value + '/' + userId;
+  uni.connectSocket({ url: wsurl });
+  uni.onSocketMessage(function (res) {
+    console.log("收到服务器内容：" + res.data);
+  });
+});
+
 // 初始宫格内容
 const grids = [
-  { logo: 'https://jfkhjoidjf.ltd/api/static/file/cat/afro.png', nickname: '张三', owner: true, seat: 1, userId: '1' },
-  { logo: 'https://jfkhjoidjf.ltd/api/static/file/cat/afro.png', nickname: '李四', owner: false, seat: 2, userId: '2' },
-  { logo: 'https://jfkhjoidjf.ltd/api/static/file/cat/afro.png', nickname: '王五', owner: false, seat: 3, userId: '3' },
-  { logo: 'https://jfkhjoidjf.ltd/api/static/file/cat/afro.png', nickname: '老六', owner: false, seat: 4, userId: '4' },
-  { logo: 'https://jfkhjoidjf.ltd/api/static/file/cat/afro.png', nickname: '小七', owner: false, seat: 5, userId: '5' }
-]
+  {
+    logo: "https://jfkhjoidjf.ltd/api/static/file/cat/afro.png",
+    nickname: "张三",
+    owner: true,
+    seat: 1,
+    userId: "1",
+  },
+  {
+    logo: "https://jfkhjoidjf.ltd/api/static/file/cat/afro.png",
+    nickname: "李四",
+    owner: false,
+    seat: 2,
+    userId: "2",
+  },
+  {
+    logo: "https://jfkhjoidjf.ltd/api/static/file/cat/afro.png",
+    nickname: "王五",
+    owner: false,
+    seat: 3,
+    userId: "3",
+  },
+];
 
 // 九宫格item点击事件
-const handleGrid = (item:any) => {
-  console.log('hahahaha')
-}
+const handleGrid = (item: any) => {
+  console.log("hahahaha");
+};
 // 开始游戏
-const begin = (item:any) => {
-  console.log('hahahaha')
+const begin = () => {
+  console.log("hahahaha");
   uni.navigateTo({
-    url: '/pages/room/show',
-    fail (err) {
-      console.log(err)
-    }
-  })
-}
+    url: "/pages/room/show",
+    fail(err) {
+      console.log(err);
+    },
+  });
+};
 // 邀请好友
-const invite = (item:any) => {
-  console.log('hahahaha')
-}
+const invite = () => {
+  console.log("hahahaha");
+};
 </script>
 
 <style lang="scss" scoped>
@@ -83,7 +112,7 @@ const invite = (item:any) => {
   width: 100% !important;
 }
 
-.title{
+.title {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -91,13 +120,13 @@ const invite = (item:any) => {
   color: #f1f1f1;
 }
 
-.grid-icon{
+.grid-icon {
   width: 160rpx;
   height: 160rpx;
   margin: 15rpx;
   object-fit: cover;
 }
-.grid-item-img{
+.grid-item-img {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -105,7 +134,7 @@ const invite = (item:any) => {
   flex-direction: column;
   color: #f1f1f1;
 }
-.wrap{
+.wrap {
   display: flex;
   justify-content: center;
   align-items: center;

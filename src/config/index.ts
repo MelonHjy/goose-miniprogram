@@ -12,7 +12,7 @@ const config = {
   ASSETS_BASE_URL: 'https://jfkhjoidjf.ltd/api/',
 
   // WebSocket base url
-  WS_BASE_URL: '',
+  WS_BASE_URL: 'wss://jfkhjoidjf.ltd/api/websocket/',
 
   // TOKEN 键名
   TOKEN_KEY: 'token'
