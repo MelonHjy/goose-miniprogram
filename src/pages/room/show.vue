@@ -9,7 +9,7 @@
       </view>
 
       <view class="mb-[10px] mt-[24px] info">
-        <text>你的角色是：{{ data.roleStr }}</text>
+        <text>你的角色是：{{ roleMap.get(data.role) }}</text>
         <text>座位：{{ data.currentUserSort }}</text>
         <text>{{ data.roleDesc }}</text>
         <text v-if="false">请耐心等待。在此期间不要偷看别人表演哦。前面表演完毕会通知你的</text>
@@ -27,50 +27,78 @@
       </view>
 
       <view class="wrap">
-        <button class="button" type="primary" @click="begin()">
-          开始表演
-        </button>
-        <button class="button" type="primary" @click="end()">
-          结束表演
-        </button>
-        <button class="button" type="primary" @click="restore()">
-          还原案情
-        </button>
+        <button class="button" type="primary" @click="begin()">开始表演</button>
+        <button class="button" type="primary" @click="end()">结束表演</button>
+        <button class="button" type="primary" @click="restore()">还原案情</button>
       </view>
     </view>
   </app-background>
 </template>
 
 <script setup lang="ts">
-// let beginShow = true
-// const wait = false
-const data = {
+const roomNumber = ref("");
+const roleMap = new Map<string, string>([
+  ["head", "头猫"],
+  ["normal", "普通猫"],
+  ["evil", "恶猫"],
+]);
+
+onLoad(async (option) => {
+  roomNumber.value = option.roomNumber;
+
+  uni.$once("wsBegin", function (beginData) {
+    console.log(beginData);
+    data.value = beginData.data;
+  });
+
+  uni.onSocketMessage(function (res) {
+    console.log("收到服务器内容 show：" + res.data);
+  });
+});
+
+const data = ref({
+  currentUserId: "",
   currentUserSort: 1,
-  murderUrl: 'https://jfkhjoidjf.ltd/api/static/file/dog/mask.png',
-  sufferUrl: 'https://jfkhjoidjf.ltd/api/static/file/dog/chess.png',
-  role: 'head',
-  roleStr: '头猫',
-  roleDesc: '请记住杀手狗和被害狗的模样，你是第一个表演者哦'
-}
+  murderUrl: "https://jfkhjoidjf.ltd/api/static/file/dog/mask.png",
+  sufferUrl: "https://jfkhjoidjf.ltd/api/static/file/dog/chess.png",
+  role: "head",
+  roleStr: "头猫",
+  roleDesc: "请记住杀手狗和被害狗的模样，你是第一个表演者哦",
+});
+
+// const userInfo = await getUserInfo();
+// const userId = userInfo.userId;
 
 // 开始表演
 const begin = () => {
-  console.log('hahahaha')
-  // beginShow = false
-}
+  console.log("hahahaha"); // beginShow = false
+};
+
 // 结束表演
 const end = () => {
-  console.log('hahahaha')
-}
+  const sendEndShowMsg = JSON.stringify({
+    api: "SHOW_FINISH",
+    code: 200,
+    data: null,
+    msg: "ok",
+    requestId: 1,
+    versionId: 1,
+  });
+  console.log('show finish:', sendEndShowMsg)
+  uni.sendSocketMessage({
+    data: sendEndShowMsg,
+  });
+  console.log("end show");
+};
 //
 const restore = () => {
   uni.navigateTo({
-    url: '/pages/room/restore',
-    fail (err) {
-      console.log(err)
-    }
-  })
-}
+    url: "/pages/room/restore",
+    fail(err) {
+      console.log(err);
+    },
+  });
+};
 </script>
 
 <style lang="scss" scoped>
@@ -89,7 +117,7 @@ const restore = () => {
   width: 100% !important;
 }
 
-.title{
+.title {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -97,13 +125,13 @@ const restore = () => {
   color: #f1f1f1;
 }
 
-.grid-icon{
+.grid-icon {
   width: 160rpx;
   height: 160rpx;
   margin: 15rpx;
   object-fit: cover;
 }
-.grid-item-img{
+.grid-item-img {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -111,7 +139,7 @@ const restore = () => {
   flex-direction: column;
   color: #f1f1f1;
 }
-.wrap{
+.wrap {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -127,24 +155,24 @@ const restore = () => {
   align-items: center;
 }
 
-text{
+text {
   color: #f1f1f1;
 }
 
-.info{
+.info {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-.cards{
+.cards {
   display: flex;
   flex-direction: row;
   margin: 50rpx;
 }
 
-.card{
+.card {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -152,7 +180,7 @@ text{
   margin: 15rpx;
 }
 
-.card image{
+.card image {
   width: 320rpx;
   height: 320rpx;
   margin-bottom: 20rpx;

@@ -5,7 +5,7 @@
     </template>
     <view class="page">
       <view class="title">
-        <text>房间号：{{ roomId }}</text>
+        <text>房间号：{{ roomNumber }}</text>
       </view>
       <!-- 宫格 -->
       <view class="mb-[10px] mt-[24px]">
@@ -26,33 +26,36 @@
       </view>
 
       <view class="wrap">
-        <button class="button" type="primary" @click="begin()">开始游戏</button>
-        <button class="button" type="primary" @click="invite()">邀请好友</button>
+        <button class="button" type="primary" @click="begin">开始游戏</button>
+        <button class="button" type="primary" @click="invite">邀请好友</button>
       </view>
     </view>
   </app-background>
 </template>
 
 <script setup lang="ts">
-import config from "@/config"
+// import config from "@/config"
+import { buildWSUrl, buildUrlParams } from "@/utils/urlbuilder";
 
-const roomId = ref('')
+const roomNumber = ref("");
+const roomId = ref("");
 
 onLoad(async (option) => {
-  // 加入线下房间
   const userInfo = await getUserInfo();
-  const userId = userInfo.userId
-  roomId.value = option.roomId
+  const userId = userInfo.userId;
+  roomId.value = option.roomId;
+  roomNumber.value = option.roomNumber; // const wsurl = config.WS_BASE_URL + roomId.value + '/' + userId;
 
-  const wsurl = config.WS_BASE_URL + roomId.value + '/' + userId;
-  uni.connectSocket({ url: wsurl });
+  const wsurl = buildWSUrl([roomId.value, userId]); // 链接socket
+  uni.connectSocket({ url: wsurl }); // 加入线下房间
   uni.onSocketMessage(function (res) {
-    console.log("收到服务器内容：" + res.data);
+    console.log("收到服务器内容 room：" + res.data);
+    grids.value = res.data.userVoList;
   });
 });
 
 // 初始宫格内容
-const grids = [
+const grids = ref([
   {
     logo: "https://jfkhjoidjf.ltd/api/static/file/cat/afro.png",
     nickname: "张三",
@@ -74,22 +77,33 @@ const grids = [
     seat: 3,
     userId: "3",
   },
-];
+]);
 
 // 九宫格item点击事件
 const handleGrid = (item: any) => {
   console.log("hahahaha");
 };
+
 // 开始游戏
 const begin = () => {
-  console.log("hahahaha");
-  uni.navigateTo({
-    url: "/pages/room/show",
-    fail(err) {
-      console.log(err);
+  const sendBeginMsg = JSON.stringify({ api: "BEGIN", code: 200, data: null, msg: "ok", requestId: 1, versionId: 1 });
+  uni.sendSocketMessage({
+    data: sendBeginMsg,
+    success: (result) => {
+      console.log("发送开始游戏消息", result);
+      uni.$emit("wsBegin", { data: result });
+      uni.navigateTo({
+        // url: "/pages/room/show",
+        url: buildUrlParams("/pages/room/show", { roomNumber: roomNumber.value }),
+        fail(err) {
+          console.log(err);
+        },
+      });
     },
+    fail: (result) => console.log(result),
   });
 };
+
 // 邀请好友
 const invite = () => {
   console.log("hahahaha");

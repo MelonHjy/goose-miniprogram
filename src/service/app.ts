@@ -34,3 +34,8 @@ export const getRules = async () => {
 export const createOfflineRoom = async (params: { type: "offline" }) => {
   return request.post("/room/create", params) as Promise<any>;
 };
+
+// 获取房间信息
+export const getRoomInfo = async (params: { roomNumber: string }) => {
+  return request.get("/room/detail", { params }) as Promise<any>;
+}

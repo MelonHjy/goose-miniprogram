@@ -40,9 +40,8 @@
             ref="inputClose"
             mode="input"
             title="进入房间"
-            :value="roomId"
             placeholder="请输入房间号"
-            @confirm="dialogInputRoomConfirm()"
+            @confirm="dialogInputRoomConfirm"
           />
         </uni-popup>
       </view>
@@ -51,7 +50,9 @@
 </template>
 
 <script setup lang="ts">
-const homeService = useService()
+import { buildUrlParams } from "@/utils/urlbuilder";
+
+const homeService = useService();
 
 const navList = ref([
   // {
@@ -62,99 +63,104 @@ const navList = ref([
   //   link: '/room/index'
   // },
   {
-    title: '线下对局',
-    name: 'bar',
-    color: 'red light',
-    icon: 'friendadd',
-    linkType: 'offlineRoom',
-    link: 'room/room'
+    title: "线下对局",
+    name: "bar",
+    color: "red light",
+    icon: "friendadd",
+    linkType: "offlineRoom",
+    link: "room/room",
   },
   {
-    title: '加入对局',
-    name: 'bar',
-    color: 'orange light',
-    icon: 'friend',
-    linkType: 'inputRoom',
-    link: 'room/room'
+    title: "加入对局",
+    name: "bar",
+    color: "orange light",
+    icon: "friend",
+    linkType: "inputRoom",
+    link: "room/room",
   },
   {
-    title: '对局记录',
-    name: 'bar',
-    color: 'yellow light',
-    icon: 'baby',
-    linkType: 'page',
-    link: 'record/record'
+    title: "对局记录",
+    name: "bar",
+    color: "yellow light",
+    icon: "baby",
+    linkType: "page",
+    link: "record/record",
   },
   {
-    title: '游戏规则',
-    name: 'bar',
-    color: 'olive light',
-    icon: 'info',
-    linkType: 'page',
-    link: 'rule/index'
-  }
-])
+    title: "游戏规则",
+    name: "bar",
+    color: "olive light",
+    icon: "info",
+    linkType: "page",
+    link: "rule/index",
+  },
+]);
 
-const inputRoomDialog = ref()
-const roomId = ref()
+const inputRoomDialog = ref();
+const roomNumber = ref();
 
 // 点击事件
 const navigate = async function (item: any) {
   if (await checkLogin()) {
-    if (item.linkType === 'page') {
+    if (item.linkType === "page") {
       uni.navigateTo({
         url: item.link,
-        fail (err) {
-          console.log(err)
-        }
-      })
-    } else if (item.linkType === 'inputRoom') {
-    // 弹出输入框 进入房间
-      inputRoomDialog.value.open()
-    } else if (item.linkType === 'offlineRoom') {
+        fail(err) {
+          console.log(err);
+        },
+      });
+    } else if (item.linkType === "inputRoom") {
+      // 弹出输入框 进入房间
+      inputRoomDialog.value.open();
+    } else if (item.linkType === "offlineRoom") {
       // 创建房间
-      const r = await homeService.app.createOfflineRoom({ type: "offline" })
+      const r = await homeService.app.createOfflineRoom({ type: "offline" });
 
-      roomId.value = r.roomId
+      const roomId = r.roomId;
+      console.log(roomId)
+      roomNumber.value = r.roomNumber;
 
       uni.navigateTo({
-        url: item.link + '?roomId=' + roomId.value,
-        fail (err) {
-          console.log(err)
-        }
-      })
+        url: buildUrlParams(item.link, { roomId, roomNumber: roomNumber.value }),
+        fail(err) {
+          console.log(err);
+        },
+      });
     }
   }
-}
+};
 
 // 加入房间弹出框
-const dialogInputRoomConfirm = () => {
+const dialogInputRoomConfirm = async (inputRoomNumber: string) => {
+  roomNumber.value = inputRoomNumber;
+  const r = await homeService.app.getRoomInfo({ roomNumber: roomNumber.value });
+  const roomId = r.roomId;
+  console.log(roomId)
   uni.navigateTo({
-    url: 'room/room?roomId=' + roomId.value,
-    success () {
-      console.log(roomId)
-      // roomId.value = null
+    // url: "room/room?roomId=" + roomId,
+    url: buildUrlParams("room/room", { roomId, roomNumber: roomNumber.value }),
+    success() {
+      console.log(roomNumber.value);
     },
-    fail (err) {
-      console.log(err)
-    }
-  })
-}
+    fail(err) {
+      console.log(err);
+    },
+  });
+};
 
 const checkLogin = async function () {
-  const userInfo = await getUserInfo()
-  // 判断没登录，跳转到登录页面
+  const userInfo = await getUserInfo(); // 判断没登录，跳转到登录页面
   if (!userInfo) {
     uni.navigateTo({
-      url: '/pages/login/index',
-      fail (err) {
-        console.log(err)
-      }
-    })
-    return false
+      url: "/pages/login/index",
+      fail(err) {
+        console.log(err);
+      },
+    });
+    return false;
   }
-  return true
-}
+  return true;
+};
 </script>
 
 <style lang="scss" scoped>
@@ -186,7 +192,7 @@ const checkLogin = async function () {
     position: relative;
     z-index: 1;
     width: 46%;
-    margin: 0 1.0% 32px;
+    margin: 0 1% 32px;
     padding: 20px;
     overflow: hidden;
     background-position: center;
@@ -269,7 +275,7 @@ const checkLogin = async function () {
     font-size: 36px;
   }
 
-  .nav-li>text {
+  .nav-li > text {
     position: absolute;
     top: 16px;
     right: 24px;
