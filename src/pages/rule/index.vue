@@ -18,11 +18,11 @@
 </template>
 
 <script setup lang="ts">
-const userService = useService()
-const content = ref('')
+const userService = useService();
+const content = ref("");
 onLoad(async () => {
-  content.value = await userService.app.getRules()
-})
+  content.value = await userService.app.getRules();
+});
 </script>
 
 <style lang="scss" scoped>

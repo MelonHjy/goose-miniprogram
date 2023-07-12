@@ -1,11 +1,7 @@
 <template>
   <app-background>
     <template #background>
-      <image
-        class="background-image"
-        src="@/assets/index/images/background.png"
-        mode="aspectFill"
-      />
+      <image class="background-image" src="@/assets/index/images/background.png" mode="aspectFill" />
     </template>
     <view class="page">
       <view class="title">
@@ -16,11 +12,7 @@
       <view class="mb-[10px] mt-[24px]">
         <text>请选择凶手牌和受害者牌</text>
         <uni-grid :column="3" :show-border="false" :square="false">
-          <uni-grid-item
-            v-for="(item, index) in data.cardVos"
-            :key="index"
-            :custom-style="{ background: 'none' }"
-          >
+          <uni-grid-item v-for="(item, index) in data.cardVos" :key="index" :custom-style="{ background: 'none' }">
             <view class="grid-item-img">
               <image
                 :src="item.url"
@@ -36,19 +28,11 @@
 
         <view class="cards">
           <view class="card" @click="handleGrids('killer')">
-            <image
-              :src="killerImage"
-              mode="aspectFill"
-              :class="{ 'stage-highlight': handleKillerStage }"
-            />
+            <image :src="killerImage" mode="aspectFill" :class="{ 'stage-highlight': handleKillerStage }" />
             <text>杀手狗</text>
           </view>
           <view class="card" @click="handleGrids('victim')">
-            <image
-              :src="victimImage"
-              mode="aspectFill"
-              :class="{ 'stage-highlight': handleVictimStage }"
-            />
+            <image :src="victimImage" mode="aspectFill" :class="{ 'stage-highlight': handleVictimStage }" />
             <text>被害狗</text>
           </view>
         </view>
@@ -56,7 +40,8 @@
 
       <view class="wrap">
         <text v-if="tipText">请先指出杀手狗和被害狗的模样</text>
-        <button class="button" type="primary" @click="confirmNext()">确认</button>
+        <text v-if="handleEndStage">请等待其他玩家指认结束</text>
+        <button class="button" type="primary" :disabled="handleEndStage" @click="confirmNext()">确认</button>
       </view>
     </view>
   </app-background>
@@ -64,7 +49,7 @@
 
 <script setup lang="ts">
 // let beginShow = true
-const data = {
+const data = ref({
   currentUserSort: 1,
   murderUrl: "https://jfkhjoidjf.ltd/api/static/file/dog/mask.png",
   sufferUrl: "https://jfkhjoidjf.ltd/api/static/file/dog/chess.png",
@@ -80,7 +65,8 @@ const data = {
     { cardId: "8", url: "https://jfkhjoidjf.ltd/api/static/file/dog/mask.png" },
     { cardId: "9", url: "https://jfkhjoidjf.ltd/api/static/file/dog/other15.png" },
   ],
-};
+  status: "",
+});
 
 const tipText = ref(false); // 提示指出杀手和被害的模样
 
@@ -91,7 +77,42 @@ const victimImage = ref(); // 受害者头像
 const handleKillerStage = ref(false); // 指出凶手阶段
 const handleVictimStage = ref(false); // 指出受害者阶段
 
+const handleEndStage = ref(false); // 指出结束阶段
+
+onLoad(() => {
+  // eslint-disable-next-line no-undef
+  const app = getApp();
+  console.log(app.globalData);
+  data.value = app.globalData.websocketData;
+
+  uni.onSocketMessage(function (res) {
+    console.log("收到服务器内容 restore：" + res.data);
+    const result = JSON.parse(res.data)
+    data.value = result.data;
+
+    // 进入指认恶猫环节
+    if (data.value.status === "pointEvil") {
+      // eslint-disable-next-line no-undef
+      const app = getApp();
+      app.globalData.websocketData = result.data
+
+      uni.navigateTo({
+        url: "/pages/room/point",
+        fail(err) {
+          console.log(err);
+        },
+      });
+    }
+  });
+});
+
+// 选择凶手还是受害者阶段
 const handleGrids = (stage: string) => {
+  if (handleEndStage) {
+    // 指认过就不能再指认
+    return;
+  }
+
   if (stage === "killer") {
     handleKillerStage.value = true;
     handleVictimStage.value = false;
@@ -104,7 +125,12 @@ const handleGrids = (stage: string) => {
   }
 };
 
+// 指认图片
 const selectGrid = function (index: string, url: string) {
+  if (handleEndStage) {
+    // 指认过就不能再指认
+    return;
+  }
   if (index === victimId.value || index === killerId.value) {
     return;
   } else if (handleKillerStage.value) {
@@ -118,14 +144,21 @@ const selectGrid = function (index: string, url: string) {
   }
 };
 
+// 确认指认的图片
 const confirmNext = () => {
   if (killerId.value && victimId.value) {
-    uni.navigateTo({
-      url: "/pages/room/point",
-      fail(err) {
-        console.log(err);
-      },
+    const sendStoreMsg = JSON.stringify({
+      api: "POINT_CARD",
+      code: 200,
+      data: { pointMurderId: killerId.value, pointSufferId: victimId.value },
+      msg: "ok",
+      requestId: 1,
+      versionId: 1,
     });
+    uni.sendSocketMessage({
+      data: sendStoreMsg,
+    });
+    handleEndStage.value = true;
   } else {
     tipText.value = true;
   }

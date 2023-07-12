@@ -21,7 +21,7 @@
     }
   },
   "baseUrl": "./",
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "src/store/index.js"],
   "exclude": ["node_modules", "components/u-*"],
   "references": [{ "path": "./tsconfig.node.json" }],
   "vueCompilerOptions": {"nativeTags": [

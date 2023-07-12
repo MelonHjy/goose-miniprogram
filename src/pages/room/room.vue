@@ -50,7 +50,26 @@ onLoad(async (option) => {
   uni.connectSocket({ url: wsurl }); // 加入线下房间
   uni.onSocketMessage(function (res) {
     console.log("收到服务器内容 room：" + res.data);
-    grids.value = res.data.userVoList;
+    const result = JSON.parse(res.data);
+    grids.value = result.data.userVoList;
+
+    // 收到 BEGIN 则开始游戏，跳转页面
+    if (result.api === "BEGIN") {
+      console.log("发送开始游戏消息", result.data);
+
+      // eslint-disable-next-line no-undef
+      const app = getApp();
+      app.globalData.websocketData = result.data
+      // console.log(app.globalData);
+
+      // uni.$emit("wsBegin", { data: result.data });
+      uni.navigateTo({
+        url: buildUrlParams("/pages/room/show", { roomNumber: roomNumber.value }),
+        fail(err) {
+          console.log(err);
+        },
+      });
+    }
   });
 });
 
@@ -89,17 +108,6 @@ const begin = () => {
   const sendBeginMsg = JSON.stringify({ api: "BEGIN", code: 200, data: null, msg: "ok", requestId: 1, versionId: 1 });
   uni.sendSocketMessage({
     data: sendBeginMsg,
-    success: (result) => {
-      console.log("发送开始游戏消息", result);
-      uni.$emit("wsBegin", { data: result });
-      uni.navigateTo({
-        // url: "/pages/room/show",
-        url: buildUrlParams("/pages/room/show", { roomNumber: roomNumber.value }),
-        fail(err) {
-          console.log(err);
-        },
-      });
-    },
     fail: (result) => console.log(result),
   });
 };

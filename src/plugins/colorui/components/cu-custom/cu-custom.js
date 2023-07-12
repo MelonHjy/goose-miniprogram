@@ -6,7 +6,7 @@ Component({
    */
   options: {
     addGlobalClass: true,
-    multipleSlots: true
+    multipleSlots: true,
   },
   /**
    * 组件的属性列表
@@ -14,32 +14,32 @@ Component({
   properties: {
     bgColor: {
       type: String,
-      default: ''
+      default: "",
     },
     isCustom: {
       type: Boolean,
-      default: false
+      default: false,
     },
     isBack: {
       type: Boolean,
-      default: false
+      default: false,
     },
     bgImage: {
       type: String,
-      default: ''
+      default: "",
     },
     isLucency: {
       type: Boolean,
-      default: false
+      default: false,
     },
     noFixed: {
       type: Boolean,
-      default: false
+      default: false,
     },
     homePage: {
       type: String,
-      default: '/pages/index/index'
-    }
+      default: "/pages/index/index",
+    },
   },
 
   /**
@@ -49,13 +49,13 @@ Component({
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
     Custom: app.globalData.Custom,
-    mode: 'default'
+    mode: "default",
   },
 
   pageLifetimes: {
     show() {
-      this.getInfo()
-    }
+      this.getInfo();
+    },
   },
 
   /**
@@ -64,28 +64,27 @@ Component({
   methods: {
     BackPage() {
       wx.navigateBack({
-        delta: 1
+        delta: 1,
       });
     },
     toHome(e) {
-      if(e.currentTarget.dataset.url != ''){
+      if (e.currentTarget.dataset.url != "") {
         wx.reLaunch({
-          url: e.currentTarget.dataset.url
-        })
-      }
-      else{
+          url: e.currentTarget.dataset.url,
+        });
+      } else {
         wx.reLaunch({
-          url: '/pages/index/index'
-        })
+          url: "/pages/index/index",
+        });
       }
     },
     getInfo() {
-      var that = this
+      var that = this;
       if (getCurrentPages().length === 1) {
         that.setData({
-          mode: 'singlePage'
-        })
+          mode: "singlePage",
+        });
       }
-    }
-  }
-})
+    },
+  },
+});

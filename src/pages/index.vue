@@ -51,7 +51,6 @@
 
 <script setup lang="ts">
 import { buildUrlParams } from "@/utils/urlbuilder";
-
 const homeService = useService();
 
 const navList = ref([
@@ -117,7 +116,7 @@ const navigate = async function (item: any) {
       const r = await homeService.app.createOfflineRoom({ type: "offline" });
 
       const roomId = r.roomId;
-      console.log(roomId)
+      console.log(roomId);
       roomNumber.value = r.roomNumber;
 
       uni.navigateTo({
@@ -135,7 +134,7 @@ const dialogInputRoomConfirm = async (inputRoomNumber: string) => {
   roomNumber.value = inputRoomNumber;
   const r = await homeService.app.getRoomInfo({ roomNumber: roomNumber.value });
   const roomId = r.roomId;
-  console.log(roomId)
+  console.log(roomId);
   uni.navigateTo({
     // url: "room/room?roomId=" + roomId,
     url: buildUrlParams("room/room", { roomId, roomNumber: roomNumber.value }),

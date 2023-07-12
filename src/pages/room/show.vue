@@ -12,9 +12,20 @@
         <text>你的角色是：{{ roleMap.get(data.role) }}</text>
         <text>座位：{{ data.currentUserSort }}</text>
         <text>{{ data.roleDesc }}</text>
-        <text v-if="false">请耐心等待。在此期间不要偷看别人表演哦。前面表演完毕会通知你的</text>
+        <text v-if="data.role === 'head'">你是头猫</text>
+        <text v-if="data.role === 'evil'">你是恶猫</text>
 
-        <view class="cards">
+        <view v-if="!restoreButton">
+          <text v-if="data.currentUserId < userIdShow">
+            请耐心等待。在此期间不要偷看别人表演哦。前面表演完毕会通知你的
+          </text>
+          <text v-else-if="data.currentUserId > userIdShow">请耐心等待后续的人表演完毕</text>
+          <text v-else-if="data.currentUserId == userIdShow">请开始你的表演，表演完毕请点击结束表演</text>
+        </view>
+
+        <text v-if="restoreButton">所有人表演完毕，可以开始还原案情</text>
+
+        <view v-if="data.role === 'head'" class="cards">
           <view class="card">
             <image :src="data.murderUrl" mode="aspectFill" />
             <text>杀手狗</text>
@@ -27,16 +38,20 @@
       </view>
 
       <view class="wrap">
-        <button class="button" type="primary" @click="begin()">开始表演</button>
-        <button class="button" type="primary" @click="end()">结束表演</button>
-        <button class="button" type="primary" @click="restore()">还原案情</button>
+        <button v-show="false" class="button" type="primary" @click="begin()">开始表演</button>
+        <button v-if="data.currentUserId == userIdShow" class="button" type="primary" @click="end()">结束表演</button>
+        <!-- <button class="button" type="primary" @click="end()">结束表演</button> -->
+        <button v-if="restoreButton" class="button" type="primary" @click="restore()">还原案情</button>
       </view>
     </view>
   </app-background>
 </template>
 
 <script setup lang="ts">
+// const userInfo = await getUserInfo();
+const userIdShow = ref();
 const roomNumber = ref("");
+const restoreButton = ref(false); // 是否轮到还原案情
 const roleMap = new Map<string, string>([
   ["head", "头猫"],
   ["normal", "普通猫"],
@@ -44,15 +59,33 @@ const roleMap = new Map<string, string>([
 ]);
 
 onLoad(async (option) => {
+  const userInfo = await getUserInfo();
+  userIdShow.value = userInfo.userId;
+
   roomNumber.value = option.roomNumber;
 
-  uni.$once("wsBegin", function (beginData) {
-    console.log(beginData);
-    data.value = beginData.data;
-  });
+  // eslint-disable-next-line no-undef
+  const app = getApp();
+  console.log(app.globalData);
+  data.value = app.globalData.websocketData;
+
+  // uni.$on("wsBegin", function (beginData) {
+  //   console.log("收到开始消息：", beginData);
+  //   data.value = beginData.data;
+  // });
 
   uni.onSocketMessage(function (res) {
     console.log("收到服务器内容 show：" + res.data);
+    const result = JSON.parse(res.data);
+    data.value = result.data;
+
+    // 进入还原案情环节
+    if (data.value.status === "pointCard") {
+      restoreButton.value = true;
+      // eslint-disable-next-line no-undef
+      const app = getApp();
+      app.globalData.websocketData = result.data;
+    }
   });
 });
 
@@ -64,10 +97,9 @@ const data = ref({
   role: "head",
   roleStr: "头猫",
   roleDesc: "请记住杀手狗和被害狗的模样，你是第一个表演者哦",
+  latestUserId: "2",
+  status: "show", // 当前状态
 });
-
-// const userInfo = await getUserInfo();
-// const userId = userInfo.userId;
 
 // 开始表演
 const begin = () => {
@@ -84,13 +116,13 @@ const end = () => {
     requestId: 1,
     versionId: 1,
   });
-  console.log('show finish:', sendEndShowMsg)
+  console.log("show finish:", sendEndShowMsg);
   uni.sendSocketMessage({
     data: sendEndShowMsg,
   });
-  console.log("end show");
 };
-//
+
+// 还原案情
 const restore = () => {
   uni.navigateTo({
     url: "/pages/room/restore",
